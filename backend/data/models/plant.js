@@ -24,6 +24,7 @@ const plantSchema = new mongoose.Schema({
 	],
 	nutrientBrand: String,
 	isAutomatic: Boolean,
+	userId: Schema.Types.ObjectId,
 })
 
 const Plant = mongoose.model('Plant', plantSchema)

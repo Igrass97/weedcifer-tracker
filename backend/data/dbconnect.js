@@ -1,8 +1,10 @@
 const mongoose = require('mongoose')
 
+const { DB } = require('../config')
+
 const dbconnect = async () => {
 	try {
-		await mongoose.connect('mongodb://localhost:27017/weedciferhub')
+		await mongoose.connect(DB)
 		console.log('Connected to MongoDB')
 	} catch (error) {
 		console.log(error)
