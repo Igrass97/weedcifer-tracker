@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 
 const dbconnect = require('./data/dbconnect')
 const app = express()
@@ -11,6 +12,7 @@ const authRouter = require('./resources/auth/auth.router')
 
 const { PORT } = require('./config')
 
+app.use(cors())
 app.use(express.json())
 app.use('/auth', authRouter)
 app.use('/users', userRouter)
