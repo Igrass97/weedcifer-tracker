@@ -1,55 +1,74 @@
-import React, { useState } from 'react'
-import { Center, Input, Flex, Button, Heading } from '@chakra-ui/react'
+import React from 'react'
+import {
+  Center,
+  Flex,
+  Button,
+  Heading,
+  Text,
+  Link as ChakraLink,
+} from '@chakra-ui/react'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../Auth/Auth'
-import { useNavigate } from 'react-router-dom'
+import { WInput } from '../Common/WInput/WInput'
+import { useForm } from 'react-hook-form'
+import { ROUTES } from '../Router/routes'
 
 export const Login = () => {
   const navigate = useNavigate()
 
-  const [formData, setFormData] = useState({ email: '', password: '' })
+  const {
+    register,
+    formState: { errors, isValid },
+    handleSubmit,
+  } = useForm({ defaultValues: { email: '', password: '' }, mode: 'onChange' })
 
   const { login, isLoading } = useAuth()
 
-  const isLoginDisabled = !formData.email || !formData.password || isLoading
+  const isLoginDisabled = !isValid || isLoading
 
-  const handleFormChange = (field, value) => {
-    setFormData({ ...formData, [field]: value })
+  const handleLogin = async data => {
+    await login(data.email, data.password)
+    navigate('/', { replace: true })
   }
 
   return (
-    <Center height="100vh" width="100%" bg="gray.900" color="white">
+    <Center height="100vh" width="100%" color="white">
       <Flex width="300px" direction="column">
         <Heading textAlign="center" mb={7}>
           Weedcifer Tracker
         </Heading>
-        <Input
+        <WInput
           placeholder="Email"
           type="email"
-          mb="3"
           height="45px"
-          value={formData.email}
-          onChange={ev => handleFormChange('email', ev.target.value)}
+          error={errors?.email?.message}
+          ControlProps={register('email', { required: 'Email is required' })}
         />
-        <Input
+        <WInput
           placeholder="Password"
           type="password"
           mb={5}
           height="45px"
-          value={formData.password}
-          onChange={ev => handleFormChange('password', ev.target.value)}
+          error={errors?.password?.message}
+          ControlProps={register('password', {
+            required: 'Password is required',
+          })}
         />
         <Button
           variant="solid"
-          colorScheme="pink"
-          onClick={async () => {
-            await login(formData.email, formData.password)
-            navigate('/', { replace: true })
-          }}
+          colorScheme="purple"
+          onClick={handleSubmit(handleLogin)}
           isLoading={isLoading}
           disabled={isLoginDisabled}
         >
           Sign in
         </Button>
+        <Text mt={5} textAlign="center">
+          Don't have an account?{' '}
+          <Link to={ROUTES.register.path}>
+            <ChakraLink color="purple.300">Create One</ChakraLink>
+          </Link>
+        </Text>
       </Flex>
     </Center>
   )

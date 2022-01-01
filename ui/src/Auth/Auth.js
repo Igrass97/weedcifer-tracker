@@ -2,11 +2,14 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import WAxios from './WAxios'
 
 import { BACKEND_API } from '../backend-api'
+import { useNavigate } from 'react-router-dom'
 
 export const AuthContext = createContext(null)
 export const useAuth = () => useContext(AuthContext)
 
 export const Auth = ({ children }) => {
+  const navigate = useNavigate()
+
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -17,10 +20,13 @@ export const Auth = ({ children }) => {
       logout()
     } else if (!user) {
       getCurrentUser()
-        .then(user => setUser(user))
+        .then(user => {
+          setUser(user)
+          navigate('/', { replace: true })
+        })
         .catch(() => logout())
     }
-  }, [token, user])
+  }, [token, user, navigate])
 
   const getCurrentUser = async () => {
     const { data } = await WAxios.get(BACKEND_API.users.me)
@@ -50,15 +56,19 @@ export const Auth = ({ children }) => {
     }
   }
 
-  const register = async (email, name, password) => {
+  const register = async ({ email, name, password }) => {
+    setIsLoading(true)
     try {
-      await WAxios.post(BACKEND_API.register, {
+      await WAxios.post(BACKEND_API.users.register, {
         email,
         password,
         name,
       })
+      await login(email, password)
     } catch (error) {
       throw new Error(error.code)
+    } finally {
+      setIsLoading(false)
     }
   }
 
