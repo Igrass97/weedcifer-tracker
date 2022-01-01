@@ -19,10 +19,10 @@ app.use('/users', userRouter)
 app.use('/plants', auth, plantRouter)
 
 const main = async () => {
-	await dbconnect()
-	await app.listen(PORT)
+  await dbconnect()
+  await app.listen(PORT)
 
-	console.log(`App listening in port ${PORT}`)
+  console.log(`App listening in port ${PORT}`)
 }
 
 main()
