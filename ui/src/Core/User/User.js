@@ -13,14 +13,16 @@ export const User = () => {
   const { user, logout } = useAuth()
 
   return (
-    <Flex alignItems="center" cursor="pointer">
-      <Avatar name={user.name} size="sm" mr="2" />
-      <Menu>
-        <MenuButton>{user.name}</MenuButton>
-        <MenuList>
-          <MenuItem onClick={logout}>Logout</MenuItem>
-        </MenuList>
-      </Menu>
-    </Flex>
+    <Menu>
+      <MenuButton>
+        <Flex alignItems="center" cursor="pointer">
+          <Avatar name={user.name} size="sm" mr="2" />
+          {user.name}
+          <MenuList>
+            <MenuItem onClick={logout}>Logout</MenuItem>
+          </MenuList>
+        </Flex>
+      </MenuButton>
+    </Menu>
   )
 }

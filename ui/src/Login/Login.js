@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 import {
   Center,
   Flex,
@@ -6,15 +7,44 @@ import {
   Heading,
   Text,
   Link as ChakraLink,
+  Alert,
+  AlertIcon,
+  Box,
+  AlertDescription,
+  CloseButton,
 } from '@chakra-ui/react'
-import { useNavigate, Link } from 'react-router-dom'
+
+import { useForm } from 'react-hook-form'
 import { useAuth } from '../Auth/Auth'
 import { WInput } from '../Common/WInput/WInput'
-import { useForm } from 'react-hook-form'
 import { ROUTES } from '../Router/routes'
 
+const LoginErrorAlert = ({
+  message,
+  onClearMessage: handleClearMessage,
+  ...props
+}) => {
+  if (!message) return null
+
+  return (
+    <Box {...props}>
+      <Alert status="error">
+        <AlertIcon />
+        <AlertDescription>{message}</AlertDescription>
+        <CloseButton
+          position="absolute"
+          right="8px"
+          top="8px"
+          onClick={handleClearMessage}
+        />
+      </Alert>
+    </Box>
+  )
+}
 export const Login = () => {
   const navigate = useNavigate()
+
+  const [errorMessage, setErrorMessage] = useState('')
 
   const {
     register,
@@ -27,8 +57,12 @@ export const Login = () => {
   const isLoginDisabled = !isValid || isLoading
 
   const handleLogin = async data => {
-    await login(data.email, data.password)
-    navigate('/', { replace: true })
+    try {
+      await login(data.email, data.password)
+      navigate('/', { replace: true })
+    } catch (error) {
+      setErrorMessage(error.message)
+    }
   }
 
   return (
@@ -37,6 +71,11 @@ export const Login = () => {
         <Heading textAlign="center" mb={7}>
           Weedcifer Tracker
         </Heading>
+        <LoginErrorAlert
+          message={errorMessage}
+          onClearMessage={() => setErrorMessage('')}
+          mb={7}
+        />
         <WInput
           placeholder="Email"
           type="email"

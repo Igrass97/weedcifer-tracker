@@ -7,13 +7,16 @@ import { BrowserRouter } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
 import { Auth } from './Auth/Auth'
 import { theme } from './theme'
+import SidenavProvider from './Core/Sidenav/SidenavContext'
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <ChakraProvider theme={theme}>
         <Auth>
-          <App />
+          <SidenavProvider>
+            <App />
+          </SidenavProvider>
         </Auth>
       </ChakraProvider>
     </BrowserRouter>
