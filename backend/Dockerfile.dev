@@ -1,0 +1,6 @@
+FROM node:14-alpine
+WORKDIR /usr/wcf-be
+COPY . .
+RUN npm i
+RUN npm i -g nodemon
+ENTRYPOINT ["nodemon", "./src/app.js"]
