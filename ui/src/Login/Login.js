@@ -104,9 +104,9 @@ export const Login = () => {
         </Button>
         <Text mt={5} textAlign="center">
           Don't have an account?{' '}
-          <Link to={ROUTES.register.path}>
-            <ChakraLink color="purple.300">Create One</ChakraLink>
-          </Link>
+          <ChakraLink as={Link} to={ROUTES.register.path} color="purple.300">
+            Create One
+          </ChakraLink>
         </Text>
       </Flex>
     </Center>

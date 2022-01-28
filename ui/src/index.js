@@ -9,17 +9,23 @@ import { Auth } from './Auth/Auth'
 import { theme } from './theme'
 import SidenavProvider from './Core/Sidenav/SidenavContext'
 
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+const queryClient = new QueryClient()
+
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ChakraProvider theme={theme}>
-        <Auth>
-          <SidenavProvider>
-            <App />
-          </SidenavProvider>
-        </Auth>
-      </ChakraProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ChakraProvider theme={theme}>
+          <Auth>
+            <SidenavProvider>
+              <App />
+            </SidenavProvider>
+          </Auth>
+        </ChakraProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )
